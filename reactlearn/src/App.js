@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import Navigation from "./component/Navigation";
 import Cola from "./component/Cola";
+import Users from './component/Users';
 import {Route, Routes} from "react-router-dom";
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
@@ -12,7 +13,7 @@ function App() {
     <Navigation></Navigation>
         <div>
       <Routes>
-      <Route exact path="/snack/r" element={<Cola colaName="Muruku"></Cola>}></Route>
+      <Route exact path="/users" element={<Users></Users>}></Route>
       <Route exact path="/snack" element={<Cola colaName="ZIlabei"></Cola>}></Route> 
       <Route exact path="/colas" element={<Cola colaName="Bovonto"/>}></Route>  
         

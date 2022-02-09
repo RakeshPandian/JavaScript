@@ -7,7 +7,7 @@ class Navigation extends Component{
             <div className="container-fluid">
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
   <div className="container-fluid">
-    <a className="navbar-brand" href="#">Navbar</a>
+    <a className="navbar-brand" href="/">Rakesh Learning</a>
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span className="navbar-toggler-icon"></span>
     </button>
@@ -18,7 +18,7 @@ class Navigation extends Component{
           <Link className="nav-link active" to="/">Home</Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to="/snack/r">Users</Link>
+          <Link className="nav-link" to="/users">Users</Link>
         </li>
         <li className="nav-item">
         <Link className="nav-link" to="/snack">Roles</Link>
