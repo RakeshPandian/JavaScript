@@ -8,7 +8,8 @@ class Users extends Component{
       persons: [],
       searchText: ""
     };
-    this.handleSearchClick = this.searchClick.bind(this);
+    this.handleSearchSubmit = this.handleSearch.bind(this);
+    this.handleSearchChange = this.handleSearchType.bind(this);
     console.log("This is Users");
 }
 
@@ -19,7 +20,7 @@ componentDidMount() {
   //      'Content-Type': 'application/json'
   // } 
   // })
-  axios.get(`http://host.docker.internal:49154/api/Users`,{
+  axios.get(`http://host.docker.internal:49153/api/Users`,{
       headers: {
         'Content-Type': 'application/json'
      } 
@@ -32,13 +33,16 @@ componentDidMount() {
     })
 }
 
-handleTextChange = (e) => {
+handleSearchType (evt){
   console.log("searchText");
-  this.state.searchText = this.state.searchText + e.target.value;
+  this.setState(st=>{ return {
+    [evt.target.name]: evt.target.value}
+  });
 };
 
-searchClick(){
-  var searchURL = `http://host.docker.internal:49154/api/Users/`+"rak";
+handleSearch(evt){
+  evt.preventDefault();
+  var searchURL = `http://host.docker.internal:49153/api/Users/`+this.state.searchText;
   console.log("Search URL", searchURL);
   axios.get(searchURL,{
     headers: {
@@ -58,9 +62,11 @@ render(){
     return(
       <div className="container-fluid">
       <div className='d-inline-flex flex-row'>
-      <input type="text" className="form-control m-2" placeholder="Search by Name"  value={this.state.searchText}
-          onChange={this.handleTextChange} />
-      <button type="button" className="btn btn-secondary m-2" onClick={this.handleSearchClick}>Search</button>
+      <form onSubmit={this.handleSearchSubmit} className='d-flex flex-row'>
+          <input  className="form-control m-2" placeholder="Search by Name"  id='search'
+          name='searchText'  value={this.state.searchText} onChange={this.handleSearchChange} />
+          <button className="btn btn-secondary m-2" >Search</button>
+      </form>
       <button type="button" className="btn btn-secondary m-2">AddNew</button>
       </div>
         <div>
