@@ -2,10 +2,10 @@
 FROM node:alpine
 
 # set the working direction
-WORKDIR /app
+WORKDIR /reactlearn
 
 # add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
+ENV PATH /reactlearn/node_modules/.bin:$PATH
 
 # install app dependencies
 COPY package.json ./

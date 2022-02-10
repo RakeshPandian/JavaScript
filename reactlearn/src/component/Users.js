@@ -5,8 +5,10 @@ class Users extends Component{
     constructor(props){
     super(props);
     this.state = {
-      persons: []
-    }
+      persons: [],
+      searchText: ""
+    };
+    this.handleSearchClick = this.searchClick.bind(this);
     console.log("This is Users");
 }
 
@@ -30,12 +32,35 @@ componentDidMount() {
     })
 }
 
+handleTextChange = (e) => {
+  console.log("searchText");
+  this.state.searchText = this.state.searchText + e.target.value;
+};
+
+searchClick(){
+  var searchURL = `http://host.docker.internal:49154/api/Users/`+"rak";
+  console.log("Search URL", searchURL);
+  axios.get(searchURL,{
+    headers: {
+      'Content-Type': 'application/json'
+   } 
+  })
+  .then(res => {
+    const userslist = res.data;
+    this.setState(st=> {return {persons: userslist}; 
+    });
+    console.log(userslist);
+  })
+}
+
+
 render(){
     return(
       <div className="container-fluid">
       <div className='d-inline-flex flex-row'>
-      <input type="text" className="form-control m-2" placeholder="Search by Name" />
-      <button type="button" className="btn btn-secondary m-2">Search</button>
+      <input type="text" className="form-control m-2" placeholder="Search by Name"  value={this.state.searchText}
+          onChange={this.handleTextChange} />
+      <button type="button" className="btn btn-secondary m-2" onClick={this.handleSearchClick}>Search</button>
       <button type="button" className="btn btn-secondary m-2">AddNew</button>
       </div>
         <div>
