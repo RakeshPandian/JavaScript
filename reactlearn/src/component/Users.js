@@ -15,11 +15,6 @@ class Users extends Component{
 
 componentDidMount() {
   console.log("ComponentUsers");
-  // axios.get(`https://jsonplaceholder.typicode.com/users`,{
-  //    headers: {
-  //      'Content-Type': 'application/json'
-  // } 
-  // })
   axios.get(`http://host.docker.internal:49153/api/Users`,{
       headers: {
         'Content-Type': 'application/json'
@@ -33,8 +28,7 @@ componentDidMount() {
     })
 }
 
-handleSearchType (evt){
-  console.log("searchText");
+handleSearchType(evt){
   this.setState(st=>{ return {
     [evt.target.name]: evt.target.value}
   });
@@ -43,7 +37,6 @@ handleSearchType (evt){
 handleSearch(evt){
   evt.preventDefault();
   var searchURL = `http://host.docker.internal:49153/api/Users/`+this.state.searchText;
-  console.log("Search URL", searchURL);
   axios.get(searchURL,{
     headers: {
       'Content-Type': 'application/json'
@@ -88,6 +81,8 @@ render(){
           <td> {person.country} </td>
           <td> {person.state} </td>
           <td> {person.city} </td>
+          <td>  <button className="btn btn-secondary m-2" >Edit</button> </td>
+          <td>  <button className="btn btn-secondary m-2" >Delete</button> </td>
           </tr>
             )
         }
