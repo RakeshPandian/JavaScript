@@ -34,17 +34,19 @@ updateUserData(user){
     Country: user.country,
     State : user.state,
     City : user.city,
-    Address : user.address
+    Address : user.address,
+    password:"" 
   }; });
 }
 
 componentDidMount() {
     console.log("ComponentUsers");
     if(this.props.UserID !="0"){
-    var searchURL = `http://host.docker.internal:49153/api/Users/`+this.props.UserID;
+    var searchURL = `http://host.docker.internal:49155/api/Users/`+this.props.UserID;
     axios.get(searchURL,{
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': '*/*'
        } 
       })
       .then(res => {
@@ -72,12 +74,14 @@ handleSave(evt){
       city: this.state.City,
       address: this.state.Address,
       email: this.state.Email,
-      phone: this.state.Phone 
+      phone: this.state.Phone,
+      password:"" 
     };
 if(this.props.UserID === "0"){
-    axios.post("http://localhost:49153/api/Users/",user,{
+    axios.post("http://host.docker.internal:49155/api/Users/",user,{
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept': '*/*'
      } 
     })
     .then(res => {
@@ -97,11 +101,13 @@ else{
     city: this.state.City,
     address: this.state.Address,
     email: this.state.Email,
-    phone: this.state.Phone 
+    phone: this.state.Phone,
+    password:"" 
   };
-  axios.put("http://localhost:49153/api/Users/"+this.props.UserID,user,{
+  axios.put("http://host.docker.internal:49155/api/Users/"+this.props.UserID,user,{
     headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept': '*/*'
    } 
   })
   .then(res => {

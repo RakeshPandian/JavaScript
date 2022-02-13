@@ -21,9 +21,10 @@ class Users extends Component{
 
 componentDidMount() {
   console.log("ComponentUsers");
-  axios.get(`http://host.docker.internal:49153/api/Users`,{
+  axios.get(`http://host.docker.internal:49155/api/Users`,{
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept': 'text/plain'
      } 
     })
     .then(res => {
@@ -42,10 +43,11 @@ handleSearchType(evt){
 
 handleSearch(evt){
   evt.preventDefault();
-  var searchURL = `http://host.docker.internal:49153/api/Users/`+this.state.searchText;
+  var searchURL = `http://host.docker.internal:49155/api/Users/`+this.state.searchText;
   axios.get(searchURL,{
     headers: {
       'Content-Type': 'application/json',
+      'Accept': 'text/plain'
    } 
   })
   .then(res => {
