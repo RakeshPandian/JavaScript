@@ -17,6 +17,7 @@ class Userform extends Component{
     };
     this.handleSubmit = this.handleSave.bind(this);
     this.handleChange = this.handleFormChange.bind(this);
+    this.handleCancelClick = this.handleCancel.bind(this);
     console.log("This is Users");
 }
 
@@ -57,6 +58,11 @@ componentDidMount() {
     }
   }
 
+handleCancel(){
+  console.log("Cancel Click");
+  this.props.formSubmitClick();
+}
+
 handleFormChange(evt){
     this.setState(st=>{ return {
       [evt.target.name]: evt.target.value}
@@ -87,7 +93,11 @@ if(this.props.UserID === "0"){
     .then(res => {
       const saveresult = res.data;
       this.updateUserData(saveresult);
-      console.log("saveresult", saveresult);
+      console.log("SaveResult", saveresult);
+      this.props.formSubmitClick();
+    })
+    .catch(err=>{
+      console.log(err.Error);
     })
   }
 
@@ -113,8 +123,26 @@ else{
   .then(res => {
     const saveresult = res.data;
     this.updateUserData(saveresult);
-    console.log("saveresult", saveresult);
+    console.log("UpdateResult", saveresult);
+    this.props.formSubmitClick();
   })
+  .catch(function (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.log(error.response.data.errors);
+     // console.log(error.response.status);
+      //console.log(error.response.headers);
+    } else if (error.request) {
+      // The request was made but no response was received
+      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+      // http.ClientRequest in node.js
+      console.log(error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.log('Error', error.message);
+    }
+});
 }
 }
 
@@ -181,7 +209,7 @@ render(){
             </div>
           </div>
           <button className="btn btn-secondary m-2">Save</button>
-          <button className="btn btn-secondary m-2">Cancel</button>
+          <button className="btn btn-secondary m-2" onClick={this.handleCancelClick}>Cancel</button>
         </form>
         </div>
     );

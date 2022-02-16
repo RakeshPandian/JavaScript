@@ -17,6 +17,7 @@ class Users extends Component{
     this.handleEditClick = this.handleEdit.bind(this);
     this.handleDeleteClick = this.handleDelete.bind(this);
     this.handleAddNewClick = this.handleAddNew.bind(this);
+    this.handleSaveUpdateClick = this.handleSaveUpdate.bind(this);
     console.log("This is Users");
 }
 
@@ -30,7 +31,11 @@ componentDidMount() {
     })
     .then(res => {
       const userslist = res.data;
-      this.setState(st=> {return {persons: userslist}; 
+      this.setState(st=> {return {
+        persons: userslist,
+        currentScreen: "USERS",
+        updateUserId : "0"
+      }; 
       });
       console.log(userslist);
     })
@@ -57,7 +62,14 @@ handleSearch(evt){
     });
     console.log(userslist);
   })
+  .catch(error=>{
+    console.log(error);
+  })
 }
+
+handleSaveUpdate(){
+  this.componentDidMount();
+  }
 
 handleAddNew(){
   this.setState(st=>{ return {
@@ -116,7 +128,8 @@ render(){
         </div></>
     );
   } else if(this.state.currentScreen == "EDIT"){
-    screen = <Userform UserID = {this.state.updateUserId} UsersApiURL={this.state.usersApiURL}></Userform>
+    screen = <Userform UserID = {this.state.updateUserId} UsersApiURL={this.state.usersApiURL}
+              formSubmitClick={this.handleSaveUpdateClick}></Userform>
   }
     return(
       <div className="container-fluid">
