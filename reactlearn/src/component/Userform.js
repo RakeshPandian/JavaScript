@@ -42,7 +42,7 @@ updateUserData(user){
 componentDidMount() {
     console.log("ComponentUsers");
     if(this.props.UserID !="0"){
-    var searchURL = `http://host.docker.internal:49155/api/Users/`+this.props.UserID;
+    var searchURL = this.props.UsersApiURL+`/`+this.props.UserID;
     axios.get(searchURL,{
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ handleSave(evt){
       password:"" 
     };
 if(this.props.UserID === "0"){
-    axios.post("http://host.docker.internal:49155/api/Users/",user,{
+    axios.post(this.props.UsersApiURL+"/",user,{
       headers: {
         'Content-Type': 'application/json',
         'Accept': '*/*'
@@ -104,7 +104,7 @@ else{
     phone: this.state.Phone,
     password:"" 
   };
-  axios.put("http://host.docker.internal:49155/api/Users/"+this.props.UserID,user,{
+  axios.put(this.props.UsersApiURL+"/"+this.props.UserID,user,{
     headers: {
         'Content-Type': 'application/json',
         'Accept': '*/*'

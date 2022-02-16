@@ -9,7 +9,8 @@ class Users extends Component{
       persons: [],
       searchText: "",
       updateUserId: "0",
-      currentScreen: "USERS"
+      currentScreen: "USERS",
+      usersApiURL:"http://host.docker.internal:49154/api/Users"
     };
     this.handleSearchSubmit = this.handleSearch.bind(this);
     this.handleSearchChange = this.handleSearchType.bind(this);
@@ -21,7 +22,7 @@ class Users extends Component{
 
 componentDidMount() {
   console.log("ComponentUsers");
-  axios.get(`http://host.docker.internal:49155/api/Users`,{
+  axios.get(this.state.usersApiURL,{
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'text/plain'
@@ -43,7 +44,7 @@ handleSearchType(evt){
 
 handleSearch(evt){
   evt.preventDefault();
-  var searchURL = `http://host.docker.internal:49155/api/Users/`+this.state.searchText;
+  var searchURL = this.state.usersApiURL+`/`+this.state.searchText;
   axios.get(searchURL,{
     headers: {
       'Content-Type': 'application/json',
@@ -115,7 +116,7 @@ render(){
         </div></>
     );
   } else if(this.state.currentScreen == "EDIT"){
-    screen = <Userform UserID = {this.state.updateUserId}></Userform>
+    screen = <Userform UserID = {this.state.updateUserId} UsersApiURL={this.state.usersApiURL}></Userform>
   }
     return(
       <div className="container-fluid">
