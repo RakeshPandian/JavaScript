@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from "axios";
+import FormErrors from './FormError';
 
 class Userform extends Component{
     constructor(props){
@@ -13,7 +14,12 @@ class Userform extends Component{
       City: "",
       Address: "",
       Email: "",
-      Phone: ""
+      Phone: "",
+      Password : "",
+      formErrors: {FirstName: '', LastName: ''},
+      FirstNameValid: false,
+      LastNameValid: false,
+      formValid: false
     };
     this.handleSubmit = this.handleSave.bind(this);
     this.handleChange = this.handleFormChange.bind(this);
@@ -58,16 +64,20 @@ componentDidMount() {
     }
   }
 
-handleCancel(){
+handleCancel(evt){
+  evt.preventDefault();
   console.log("Cancel Click");
   this.props.formSubmitClick();
 }
 
 handleFormChange(evt){
-    this.setState(st=>{ return {
-      [evt.target.name]: evt.target.value}
-    });
-  };
+  const name = evt.target.name;
+  const value = evt.target.value;
+  this.setState({ [name]: value}, () => { this.validateField(name, value) });
+    // this.setState(st=>{ return {
+    //   [evt.target.name]: evt.target.value}
+    // });
+  }
 
 handleSave(evt){
     evt.preventDefault();
@@ -98,6 +108,12 @@ if(this.props.UserID === "0"){
     })
     .catch(err=>{
       console.log(err.Error);
+      err.Error.LastName.map(er => 
+        console.log(er)
+      )
+      err.Error.FirstName.map(er => 
+        console.log(er)
+      )
     })
   }
 
@@ -120,7 +136,7 @@ else{
         'Accept': '*/*'
    } 
   })
-  .then(res => {
+  .then(function (res) {
     const saveresult = res.data;
     this.updateUserData(saveresult);
     console.log("UpdateResult", saveresult);
@@ -130,7 +146,15 @@ else{
     if (error.response) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
-      console.log(error.response.data.errors);
+      var responseError = error.response.data.errors;
+      //console.log(responseError);
+      
+      // responseError.LastName.map(er => 
+      //   console.log(er)
+      // )
+      // responseError.FirstName.map(er => 
+      //   console.log(er)
+      // )
      // console.log(error.response.status);
       //console.log(error.response.headers);
     } else if (error.request) {
@@ -141,25 +165,62 @@ else{
     } else {
       // Something happened in setting up the request that triggered an Error
       console.log('Error', error.message);
+      
     }
 });
 }
 }
+isBlank(str) {
+  return (!str || /^\s*$/.test(str));
+}
+validateField(fieldName, value) {
+  let fieldValidationErrors = this.state.formErrors;
+  let firstnameValid = this.state.FirstNameValid;
+  let lastnameValid = this.state.LastNameValid;
 
+  switch(fieldName) {
+    case 'FirstName':
+      firstnameValid = !this.isBlank(value);
+      fieldValidationErrors.FirstName = firstnameValid ? '' : ' is required';
+      break;
+    case 'LastName':
+      lastnameValid = !this.isBlank(value);
+      fieldValidationErrors.LastName = lastnameValid ? '': ' is required';
+      break;
+    default:
+      break;
+  }
+  this.setState({formErrors: fieldValidationErrors,
+    FirstNameValid: firstnameValid,
+    LastNameValid: lastnameValid
+                }, this.validateForm);
+}
+
+
+
+validateForm() {
+  this.setState({formValid: this.state.FirstNameValid && this.state.LastNameValid});
+}
+
+errorClass(error) {
+  return(error.length === 0 ? '' : 'is-invalid');
+}
 
 render(){
     return(
         <div className="container-fluid m-2">
          <form onSubmit={this.handleSubmit}>
-
-          <div className="mb-2 row">
+         <div className="panel panel-default">
+          <FormErrors formErrors={this.state.formErrors} />
+        </div>
+          <div className={`mb-2 row form-group ${this.errorClass(this.state.formErrors.FirstName)}`}>
             <label className="col-sm-2 col-form-label" htmlFor='firstname'>First name</label>
             <div className="col-sm-10">
               <input type='text' className="form-control" id='firstname' name='FirstName' value={this.state.FirstName} 
                onChange={this.handleChange} />
             </div>
           </div>
-          <div className="mb-2 row">
+          <div className={`mb-2 row form-group ${this.errorClass(this.state.formErrors.LastName)}`}>
             <label className="col-sm-2 col-form-label" htmlFor='lastname'>Last name</label>
             <div className="col-sm-10">
               <input type='text' className="form-control" id='lastname' name='LastName' value={this.state.LastName} 
@@ -208,7 +269,7 @@ render(){
                onChange={this.handleChange} />
             </div>
           </div>
-          <button className="btn btn-secondary m-2">Save</button>
+          <button className="btn btn-secondary m-2" disabled={!this.state.formValid}>Save</button>
           <button className="btn btn-secondary m-2" onClick={this.handleCancelClick}>Cancel</button>
         </form>
         </div>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from "axios";
 import Userform from "./Userform";
+import UserFormHook from './UserFormHook';
 
 class Users extends Component{
     constructor(props){
@@ -10,7 +11,8 @@ class Users extends Component{
       searchText: "",
       updateUserId: "0",
       currentScreen: "USERS",
-      usersApiURL:"http://host.docker.internal:49154/api/Users"
+      usersApiURL:"http://host.docker.internal:49153/api/Users",
+      selectedPerson: ""
     };
     this.handleSearchSubmit = this.handleSearch.bind(this);
     this.handleSearchChange = this.handleSearchType.bind(this);
@@ -84,10 +86,11 @@ handleEdit(userID){
   });
 }
 
-handleDelete(userID){
+handleDelete(selPerson){
   this.setState(st=>{ return {
-    currentScreen: "DELETE",
-    updateUserId : userID }
+    currentScreen: "EDITHOOK",
+    updateUserId : selPerson.id,
+    selectedPerson: selPerson }
   });
 }
 
@@ -120,7 +123,7 @@ render(){
                   <td> {person.state} </td>
                   <td> {person.city} </td>
                   <td>  <button className="btn btn-secondary m-2" onClick={() =>this.handleEditClick(person.id.toString())}>Edit</button> </td>
-                  <td>  <button className="btn btn-secondary m-2" onClick={() =>this.handleDeleteClick(person.id.toString())}>Delete</button> </td>
+                  <td>  <button className="btn btn-secondary m-2" onClick={() =>this.handleDeleteClick(person)}>Edit on Hook</button> </td>
                 </tr>
                 )}
             </tbody>
@@ -130,6 +133,10 @@ render(){
   } else if(this.state.currentScreen == "EDIT"){
     screen = <Userform UserID = {this.state.updateUserId} UsersApiURL={this.state.usersApiURL}
               formSubmitClick={this.handleSaveUpdateClick}></Userform>
+  }
+  else if(this.state.currentScreen == "EDITHOOK"){
+    screen = <UserFormHook UserID = {this.state.updateUserId} UsersApiURL={this.state.usersApiURL}
+              formSubmitClick={this.handleSaveUpdateClick} User={this.state.selectedPerson}></UserFormHook>
   }
     return(
       <div className="container-fluid">

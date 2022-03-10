@@ -5,10 +5,11 @@ import Cola from "./component/Cola";
 import Users from './component/Users';
 import {Route, Routes} from "react-router-dom";
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import { LanguageContext, LanguageProvider } from './contexts/ThemeContexts';
 
 function App() {
   return (
-
+<LanguageProvider>
     <div className="App">
     <Navigation></Navigation>
         <div>
@@ -21,6 +22,7 @@ function App() {
       </Routes>
     </div>
     </div>
+    </LanguageProvider>
   );
 }
 
