@@ -5,7 +5,7 @@ import Cola from "./component/Cola";
 import Users from './component/Users';
 import {Route, Routes} from "react-router-dom";
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { LanguageContext, LanguageProvider } from './contexts/ThemeContexts';
+import { LanguageProvider } from './contexts/ThemeContexts';
 
 function App() {
   return (
